@@ -82,7 +82,9 @@ done
 
 touch /app/test3
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+	sed -i "s|<NEWRELIC_KEY_HERE>|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
 	/app/newrelic/bin/newrelic-license
+	
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
 fi
 
