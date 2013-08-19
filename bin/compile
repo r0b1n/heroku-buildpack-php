@@ -27,6 +27,7 @@ mkdir -p $CACHE_DIR/www
 mv * $CACHE_DIR/www
 mv $CACHE_DIR/www .
 
+printenv
 # keep Procfile
 if [ -f www/Procfile ]; then
   mv www/Procfile .
@@ -43,6 +44,8 @@ curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 NEWRELIC_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/newrelic-$NEWRELIC_VERSION-heroku.tar.gz"
 echo "-----> Bundling new relic version $NEWRELIC_VERSION"
 curl --silent --max-time 60 --location "$NEWRELIC_URL" | tar xz
+
+sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
 
 # update config files
 cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
@@ -79,10 +82,10 @@ done
 # start new relic daemon
 touch "/app/${NEW_RELIC_LICENSE_KEY}"
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
-	sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
+	
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
 fi
-
+printenv >> /app/env
 touch /app/apache/logs/error_log
 touch /app/apache/logs/access_log
 tail -F /app/apache/logs/error_log &
