@@ -86,9 +86,7 @@ if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 	/app/newrelic/bin/newrelic-license
 	
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
-	
-	cp /app/php/php.ini /app/www/php.txt
-	cp /app/newrelic/etc/newrelic.cfg /app/www/nr.txt
+
 fi
 
 touch /app/apache/logs/error_log
