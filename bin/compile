@@ -86,7 +86,6 @@ if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
 fi
 
-printenv >> /app/www/env.txt
 touch /app/apache/logs/error_log
 touch /app/apache/logs/access_log
 tail -F /app/apache/logs/error_log &
