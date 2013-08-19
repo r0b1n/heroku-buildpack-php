@@ -73,11 +73,12 @@ for var in \`env|cut -f1 -d=\`; do
 done
 
 # Set NEWRELIC key
-if [ -x "/app/newrelic/bin/newrelic-license" ]; then
-	/app/newrelic/bin/newrelic-license
-fi
+#if [ -x "/app/newrelic/bin/newrelic-license" ]; then
+#	/app/newrelic/bin/newrelic-license
+#fi
 # start new relic daemon
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+	sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
 fi
 
