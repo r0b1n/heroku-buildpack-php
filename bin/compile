@@ -10,6 +10,8 @@ APACHE_PATH="apache"
 PHP_VERSION="5.3.27"
 PHP_PATH="php"
 
+NEWRELIC_VERSION="3.7.5.7"
+
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -38,7 +40,7 @@ PHP_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/php-$PHP_VERSION-hero
 echo "-----> Bundling PHP version $PHP_VERSION"
 curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 
-PHP_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/newrelic-heroku.tar.gz"
+PHP_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/newrelic-$NEWRELIC_VERSION-heroku.tar.gz"
 echo "-----> Bundling new relic"
 curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 
