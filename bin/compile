@@ -68,26 +68,25 @@ if [ -f www/composer.json ] && [ ! -d www/vendor ]; then
 fi
 
 cat >>boot.sh <<EOF
-touch /app/test1
+
 for var in \`env|cut -f1 -d=\`; do
   echo "PassEnv \$var" >> /app/apache/conf/httpd.conf;
 done
 
-touch /app/test2
 
 # Set NEWRELIC key
 #if [ -x "/app/newrelic/bin/newrelic-license" ]; then
 #	/app/newrelic/bin/newrelic-license
 #fi
 # start new relic daemon
-touch "/app/${NEW_RELIC_LICENSE_KEY}"
+
 touch /app/test3
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
-	
+	/app/newrelic/bin/newrelic-license
 	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
 fi
-touch /app/test4
-printenv >> /app/env
+
+printenv >> /app/www/env.txt
 touch /app/apache/logs/error_log
 touch /app/apache/logs/access_log
 tail -F /app/apache/logs/error_log &
