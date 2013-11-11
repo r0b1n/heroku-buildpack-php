@@ -7,10 +7,8 @@ set -e
 # config
 APACHE_VERSION="2.2.25"
 APACHE_PATH="apache"
-PHP_VERSION="5.3.27"
+PHP_VERSION="5.5.5"
 PHP_PATH="php"
-
-NEWRELIC_VERSION="3.7.5.7"
 
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1
@@ -32,21 +30,17 @@ if [ -f www/Procfile ]; then
   mv www/Procfile .
 fi
 
-APACHE_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/apache-$APACHE_VERSION-heroku.tar.gz"
+APACHE_URL="http://77.122.49.192/apache-$APACHE_VERSION.tar.gz"
 echo "-----> Bundling Apache version $APACHE_VERSION"
 curl --silent --max-time 60 --location "$APACHE_URL" | tar xz
 
-PHP_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/php-$PHP_VERSION-heroku.tar.gz"
+PHP_URL="http://77.122.49.192/php-$PHP_VERSION.tar.gz"
 echo "-----> Bundling PHP version $PHP_VERSION"
 curl --silent --max-time 60 --location "$PHP_URL" | tar xz
 
-NEWRELIC_URL="http://dl.dropboxusercontent.com/u/7297216/heroku/newrelic-$NEWRELIC_VERSION-heroku.tar.gz"
-echo "-----> Bundling new relic version $NEWRELIC_VERSION"
-curl --silent --max-time 60 --location "$NEWRELIC_URL" | tar xz
-
 # update config files
-cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
-cp $LP_DIR/conf/php.ini php
+#cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
+#cp $LP_DIR/conf/php.ini php
 
 # make php available on bin
 mkdir -p bin
@@ -73,21 +67,6 @@ for var in \`env|cut -f1 -d=\`; do
   echo "PassEnv \$var" >> /app/apache/conf/httpd.conf;
 done
 
-
-# Set NEWRELIC key
-#if [ -x "/app/newrelic/bin/newrelic-license" ]; then
-#	/app/newrelic/bin/newrelic-license
-#fi
-# start new relic daemon
-
-touch /app/test3
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
-	
-	/app/newrelic/bin/newrelic-license
-	
-	/app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
-
-fi
 
 touch /app/apache/logs/error_log
 touch /app/apache/logs/access_log
